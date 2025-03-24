@@ -20,9 +20,13 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
                 <p class="mb-0">${quote.quote}</p>
                 <footer class="blockquote-footer">${quote.author}</footer>
                 <br>
-                <button class='btn-success' data-id="${quote.id}">Likes: <span>${}</span></button>
-                <button class='btn-danger'>Delete</button>
+                <button class='btn-success' data-id="${quote.id}">Likes: <span>${quote.likes}</span></button>
+                <button class='btn-danger' data-id="${quote.id}">Delete</button>
             </blockquote>
-        `
+        `;
+
+        quoteList.appendChild(li);
     }
+
+    fetchQuotes();
 })
