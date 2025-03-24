@@ -28,5 +28,27 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
         quoteList.appendChild(li);
     }
 
+    newQuoteForm.addEventListener('submit', event => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        const quote = formData.get('quote');
+        const author = formData.get('author');
+
+        fetch('http://localhost:3000/quotes',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            } ,
+            body: JSON.stringify({quote, author}),
+
+        })
+            .then(response => response.json())
+            .then(newQuote => {
+                renderQuote(newQuote);
+                event.target.reset()
+            })
+    })
+
+    
     fetchQuotes();
 })
