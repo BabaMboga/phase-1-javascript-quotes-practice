@@ -43,6 +43,19 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
         }
 
         function handleLikeClick(quoteId, button) {
+            fetch('http://localhost:3000/likes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify({quoteId: quote.id})
+            })
+                .then(res => res.json())
+                .then(() => {
+                    const likesSpan = button.querySelector('span');
+                    likesSpan.textContent = parseInt(likesSpan.textContent) + 1;
+
+                });
 
         }
     }
@@ -63,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
         })
             .then(response => response.json())
             .then(newQuote => {
-                renderQuote(newQuote);
+                renderQuote({...newQuote, likes:[]});
                 event.target.reset()
             })
     })
