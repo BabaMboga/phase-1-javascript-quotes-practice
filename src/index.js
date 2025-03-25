@@ -2,12 +2,12 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
     const quoteList = document.querySelector('#quote-list');
     const newQuoteForm = document.querySelector('#new-quote-form');
 
-    function fetchQuotes(){
+    function fetchQuotes(){ // basic get request
         fetch('http://localhost:3000/quotes?_embed=likes')
             .then(response => response.json())
             .then(quotes => {
                 quoteList.innerHTML = '' // clearing list before we add new content
-                quotes.forEach(quote => renderQuote(quote));
+                quotes.forEach(quote => renderQuote(quote)); // function to render quote on HTML
             } );
     }
 
@@ -26,6 +26,25 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
         `;
 
         quoteList.appendChild(li);
+
+        //get our buttons and add event listeners
+        const likeButton = li.querySelector('.btn-success');
+        const deleteButton = li.querySelector('.btn-danger');
+
+        likeButton.addEventListener('click', () => hanleLikeClick(quote.id, likeButton));
+        deleteButton.addEventListener('click', () => handleDeleteCLick(quote.id, li));
+
+        function handleDeleteCLick(quoteId, element){
+            fetch(`http:localhost:3000/quotes/${quoteId}`,{
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(() => element.remove())
+        }
+
+        function handleLikeClick(quoteId, button) {
+
+        }
     }
 
     newQuoteForm.addEventListener('submit', event => {
@@ -34,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
         const quote = formData.get('quote');
         const author = formData.get('author');
 
-        fetch('http://localhost:3000/quotes',{
+        fetch('http://localhost:3000/quotes',{ // POST request
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -48,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => { //waits for DOM to load so
                 event.target.reset()
             })
     })
-
     
+
     fetchQuotes();
 })
